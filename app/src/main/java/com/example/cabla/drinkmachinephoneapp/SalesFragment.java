@@ -1,5 +1,6 @@
 package com.example.cabla.drinkmachinephoneapp;
 
+import android.icu.text.AlphabeticIndex;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -13,9 +14,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -28,7 +34,8 @@ public class SalesFragment extends Fragment {
 
     Boolean initialDisplay = true;
     String [] default_values = {"11/18/2018","11/17/2018"};
-    String [] file_values = {"11/18/2018","11/17/2018"};
+    String [] file_values = {"11/18/2018","11/17/2018"}; //these dates will need to come from file
+    //maybe only load the latest 5-8 dates
 
     public SalesFragment() {
         // Required empty public constructor
@@ -41,12 +48,11 @@ public class SalesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view_frag = inflater.inflate(R.layout.fragment_sales2, container, false);
         BarChart sales_chart = view_frag.findViewById(R.id.sales_bar_chart);
-
+        sales_chart.invalidate();
         TextView rev_label = view_frag.findViewById(R.id.total_revenue_label);
 
 
         TextView rev_val = view_frag.findViewById(R.id.total_revenue_value);
-        rev_val.setText("$20");
 
         Spinner day_of_sales_spinner = view_frag.findViewById(R.id.day_of_sales_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item,default_values);
@@ -54,11 +60,11 @@ public class SalesFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         day_of_sales_spinner.setAdapter(adapter);
 
-        setupCallbacks(day_of_sales_spinner,view_frag,sales_chart);
+        setupCallbacks(day_of_sales_spinner,view_frag,sales_chart,rev_val);
         return view_frag ;
     }
 
-    public void setupCallbacks(Spinner spinner, View view, final BarChart sales_chart){
+    public void setupCallbacks(Spinner spinner, View view, final BarChart sales_chart,final TextView total){
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -67,37 +73,102 @@ public class SalesFragment extends Fragment {
                     initialDisplay = false; //onItemSelected is called when everything is first initialized
                     // so this flag ignores that first call, but allows any call after
                 }else{
-                    ArrayList<BarEntry> bar_chart_entries = new ArrayList<>();
+                    sales_chart.invalidate();
+
+                    // String total_revenue = container[val];
+                    //total.setText(total_revenue);
+                    total.setText("$45");
+
+                    // get how many drinks Float axis_size = (float)(container.length() +1 );
+                    Float axis_size = (float)7 ;
+
+                    //axis configuration
+                    XAxis x_axis = sales_chart.getXAxis();
+                    x_axis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    x_axis.setTextSize(10f);
+                    x_axis.setAxisMinValue(0f);
+                    x_axis.setAxisMaxValue(axis_size);
+                    x_axis.setTextSize(3);
+
+                    YAxis left_axis = sales_chart.getAxisLeft();
+                    YAxis right_axis = sales_chart.getAxisRight();
+
+                    left_axis.setDrawZeroLine(true);
+                    left_axis.setAxisMinValue(0f);
+                    right_axis.setDrawLabels(false);
+                    sales_chart.getAxisRight().setEnabled(false);
 
                     //use a for loop instead that packs revenue data into array list
-                    bar_chart_entries.add(new BarEntry(2.5f,0));
-                    bar_chart_entries.add(new BarEntry(4f,1));
-                    bar_chart_entries.add(new BarEntry(5f,2));
-                    bar_chart_entries.add(new BarEntry(10f,3));
-                    bar_chart_entries.add(new BarEntry(0f,4));
-                    bar_chart_entries.add(new BarEntry(3f,5));
+                    /*
+                        container;
+                        ArrayList<BarEntry> bar_chart_entries = new ArrayList<>();
+                        int revenue = 0;
+                        for(int i=(int)0; i < container.length();i++) {
+                            revenue = container[1][i]   //make first element the total sales of a drink
+                            bar_chart_entries.add(new BarEntry(i,revenue))
+                        }
+                     */
+                    ArrayList<BarEntry> bar_chart_entries = new ArrayList<>();
+                    bar_chart_entries.add(new BarEntry(1,5));
+                    bar_chart_entries.add(new BarEntry(2,6));
+                    bar_chart_entries.add(new BarEntry(3,7));
+                    bar_chart_entries.add(new BarEntry(4,8));
+                    bar_chart_entries.add(new BarEntry(5,9));
+                    bar_chart_entries.add(new BarEntry(6,10));
 
                     BarDataSet data_for_display = new BarDataSet(bar_chart_entries,
                             "Revenue from drink menu");
-
-                    // length() on list of drink names
-
-                    String[] drink_names = new String[6];
+                    data_for_display.setColors(ColorTemplate.JOYFUL_COLORS);
 
                     //use a for loop instead that packs revenue data into array list
-                    drink_names[0] = "Cuba Libre";
-                    drink_names[1] = "Daiquiri";
-                    drink_names[2] = "Screwdriver";
-                    drink_names[3] = "Tequila";
-                    drink_names[4] = "Vodka";
-                    drink_names[5] = "Vodka & Cranberry";
+                    /*
+                        container;
+                        String[] drink_names = new String[container.length()];
+                        for(int i=(int)0; i < container.length();i++) {
+                            drink_names[i] = container[i];
+                        }
+                    */
+
+                    String[] drink_names = new String[7];
+                    drink_names[0] = "";
+                    drink_names[1] = "Cuba Libre";
+                    drink_names[2] = "Daiquiri";
+                    drink_names[3] = "Screwdriver";
+                    drink_names[4] = "Tequila";
+                    drink_names[5] = "Vodka";
+                    drink_names[6] = "Vodka & Cranberry";
+
+                    //needs to be an arraylist object before put on X-axis
+                    final ArrayList<String> xEntrys = new ArrayList<>();
+                    for(int i = 0; i < drink_names.length; i++){
+                        xEntrys.add(drink_names[i]);
+                    }
+
+                    //put drink names on X-axis
+                    x_axis.setValueFormatter(new AxisValueFormatter() {
+                        @Override
+                        public String getFormattedValue(float value, AxisBase axis) {
+                            return xEntrys.get((int)value % xEntrys.size());
+                        }
+
+                        @Override
+                        public int getDecimalDigits() {
+                            return 0;
+                        }
+                    });
 
                     BarData data = new BarData(data_for_display);
-                    //sales_chart.getXAxis().setValueFormatter(new LabelFormatter(drink_names));
-                    data_for_display.setColors(ColorTemplate.COLORFUL_COLORS);
-                    sales_chart.setData(data);
-                    sales_chart.setDescription("Daily Drink Sales");
+                    data.setBarWidth(0.5f);
 
+                    //sales_chart.setScaleXEnabled(false);
+                    //sales_chart.setScaleYEnabled(false);
+                    sales_chart.setPinchZoom(false);
+                    sales_chart.setDrawGridBackground(false);
+
+                    sales_chart.setDescription("Daily Drink Sales");
+                    sales_chart.setDescriptionPosition(150,30);
+                    sales_chart.getLegend().setEnabled(false);
+                    sales_chart.setData(data);
                 }
 
             }
