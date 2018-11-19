@@ -10,4 +10,14 @@
     <string name="tab_text_1">Inventory</string>
     <string name="tab_text_2">Sales</string>
     <string name="tab_text_3">System Status</string>
+
+    <string name="inventory_fragment">Inventory fragment</string>
+
+    <string name="total_revenue">Total revenue:</string>
+
+
+    <string name="status_label">Status:</string>
+    <string name="mode_label">Mode:</string>
+    <string name="cur_user_label">Current User:</string>
+
 </resources>
