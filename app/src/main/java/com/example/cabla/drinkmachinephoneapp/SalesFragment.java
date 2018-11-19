@@ -160,7 +160,8 @@ public class SalesFragment extends Fragment {
                     BarData data = new BarData(data_for_display);
                     data.setBarWidth(0.5f);
 
-                    //sales_chart.setScaleXEnabled(false);
+                    sales_chart.setScaleXEnabled(false);
+
                     //sales_chart.setScaleYEnabled(false);
                     sales_chart.setPinchZoom(false);
                     sales_chart.setDrawGridBackground(false);
