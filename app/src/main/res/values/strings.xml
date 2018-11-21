@@ -12,6 +12,9 @@
     <string name="tab_text_3">System Status</string>
 
     <string name="inventory_fragment">Inventory fragment</string>
+    <string name="subtitle1"> Items</string>
+    <string name="subtitle2">QTY Left</string>
+    <string name="subtitle3">Original QTY</string>
 
     <string name="total_revenue">Total revenue:</string>
 

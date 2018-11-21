@@ -32,6 +32,8 @@ import java.util.ArrayList;
  */
 public class SalesFragment extends Fragment {
 
+    int dummy_data = 1;
+
     Boolean initialDisplay = true;
     String [] default_values = {"11/18/2018","11/17/2018"};
     String [] file_values = {"11/18/2018","11/17/2018"}; //these dates will need to come from file
@@ -109,13 +111,15 @@ public class SalesFragment extends Fragment {
                         }
                      */
                     ArrayList<BarEntry> bar_chart_entries = new ArrayList<>();
-                    bar_chart_entries.add(new BarEntry(1,5));
-                    bar_chart_entries.add(new BarEntry(2,6));
-                    bar_chart_entries.add(new BarEntry(3,7));
-                    bar_chart_entries.add(new BarEntry(4,8));
-                    bar_chart_entries.add(new BarEntry(5,9));
-                    bar_chart_entries.add(new BarEntry(6,10));
 
+                    if(dummy_data ==1) {
+                        bar_chart_entries.add(new BarEntry(1, 5));
+                        bar_chart_entries.add(new BarEntry(2, 6));
+                        bar_chart_entries.add(new BarEntry(3, 7));
+                        bar_chart_entries.add(new BarEntry(4, 8));
+                        bar_chart_entries.add(new BarEntry(5, 9));
+                        bar_chart_entries.add(new BarEntry(6, 10));
+                    }
                     BarDataSet data_for_display = new BarDataSet(bar_chart_entries,
                             "Revenue from drink menu");
                     data_for_display.setColors(ColorTemplate.JOYFUL_COLORS);
@@ -130,13 +134,15 @@ public class SalesFragment extends Fragment {
                     */
 
                     String[] drink_names = new String[7];
-                    drink_names[0] = "";
-                    drink_names[1] = "Cuba Libre";
-                    drink_names[2] = "Daiquiri";
-                    drink_names[3] = "Screwdriver";
-                    drink_names[4] = "Tequila";
-                    drink_names[5] = "Vodka";
-                    drink_names[6] = "Vodka & Cranberry";
+                    if(dummy_data ==1) {
+                        drink_names[0] = "";
+                        drink_names[1] = "Cuba Libre";
+                        drink_names[2] = "Daiquiri";
+                        drink_names[3] = "Screwdriver";
+                        drink_names[4] = "Tequila";
+                        drink_names[5] = "Vodka";
+                        drink_names[6] = "Vodka & Cranberry";
+                    }
 
                     //needs to be an arraylist object before put on X-axis
                     final ArrayList<String> xEntrys = new ArrayList<>();
@@ -175,7 +181,7 @@ public class SalesFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {} //needed for proper use
         });
     }
 
