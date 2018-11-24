@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(next_screen);  //goes to tabbed screen
                 }else{
                     //incorrect password
-                    Toast.makeText(MainActivity.this,"User-name and Password is not correct",
+                    Toast.makeText(MainActivity.this,"Username and Password is not correct",
                             Toast.LENGTH_SHORT).show();
                     --attempts;
                     if(attempts==0){

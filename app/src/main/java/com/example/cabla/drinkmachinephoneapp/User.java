@@ -52,6 +52,10 @@ public class User extends AppCompatActivity {
         prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
         attemptDataTransfer();
+        if(noData){
+            Toast.makeText(this,"Could not retrieve data from: "+url,
+                    Toast.LENGTH_LONG).show(); //LENGTH_LONG = 3.5 sec
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,12 +80,15 @@ public class User extends AppCompatActivity {
             Thread t = new Thread(request);
             t.start();
             t.join();
-
-            sales_package = request.getSalesData();
-            inventory_package = request.getInventoryData();
-            status_package = request.getStatusData();
-            dates = request.getDates();
-            noData = false;
+            if(request.getError()){
+                noData = true;
+            }else {
+                sales_package = request.getSalesData();
+                inventory_package = request.getInventoryData();
+                status_package = request.getStatusData();
+                dates = request.getDates();
+                noData = false;
+            }
         }
         catch (InterruptedException i){
             Log.i("CHRIS","TEST3");
@@ -116,9 +123,14 @@ public class User extends AppCompatActivity {
             return true;
         }
         if(id == R.id.request_data){
-            attemptDataTransfer();
             Toast.makeText(this,"Attempting to update data",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
+            attemptDataTransfer();
+            if(noData){
+                Toast.makeText(this,"Could not retrieve data from: "+url,
+                        Toast.LENGTH_SHORT).show();
+            }
+
             return true;
         }
 

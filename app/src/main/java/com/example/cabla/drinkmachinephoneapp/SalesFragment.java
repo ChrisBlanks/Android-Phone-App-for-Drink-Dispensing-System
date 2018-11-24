@@ -58,15 +58,18 @@ public class SalesFragment extends Fragment {
         sales_info = getArguments().getStringArrayList("sales");
         no_status_data  = getArguments().getBoolean("no_data") ;
         dates = getArguments().getStringArrayList("dates");
-        if(dates != null) {
-            dates_for_spin = new String[dates.size()+1];
-            int counter = 0;
-            dates_for_spin[counter]= "-----";
-            for (String temp : dates) {
-                dates_for_spin[counter+1] = temp;
-                counter++;
-            }
-        }else{
+        if(no_status_data == false){
+                if(dates != null) {
+                    dates_for_spin = new String[dates.size() + 1];
+                    int counter = 0;
+                    dates_for_spin[counter] = "-----";
+                    for (String temp : dates) {
+                        dates_for_spin[counter + 1] = temp;
+                        counter++;
+                    }
+                }else{ dates_for_spin = default_values; }
+        }
+        else{
             dates_for_spin = default_values;
         }
         View view_frag = inflater.inflate(R.layout.fragment_sales2, container, false);
@@ -130,7 +133,10 @@ public class SalesFragment extends Fragment {
 
                     //axis configuration
                     XAxis x_axis = sales_chart.getXAxis();
-                    x_axis.setLabelCount(sales_info.size()+1);
+                    if(no_status_data == false){
+                        x_axis.setLabelCount(sales_info.size()+1);
+                    }
+
                     x_axis.setPosition(XAxis.XAxisPosition.BOTTOM);
                     x_axis.setTextSize(2f);
                     x_axis.setAxisMinValue(0f);

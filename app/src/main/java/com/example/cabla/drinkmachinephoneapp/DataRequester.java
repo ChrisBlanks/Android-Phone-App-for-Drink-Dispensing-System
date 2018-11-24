@@ -38,6 +38,7 @@ public class DataRequester implements Runnable {
         retrieveFiles();
     }
 
+
     public boolean getError(){
         return noConnection;
     }
