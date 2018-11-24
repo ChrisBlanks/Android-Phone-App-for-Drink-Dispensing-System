@@ -2,14 +2,14 @@ package com.example.cabla.drinkmachinephoneapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.util.Log;
 import android.widget.EditText;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Intent;
 
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button login_but;
@@ -37,9 +37,46 @@ public class MainActivity extends AppCompatActivity {
                 if(username.getText().toString().equals("admin")
                         && password.getText().toString().equals("admin")){
                     //correct password
+
                     Toast.makeText(MainActivity.this,"Username and Password is correct",
                             Toast.LENGTH_SHORT).show();
+
                     Intent next_screen = new Intent("com.example.cabla.drinkmachinephoneapp.User");
+
+                    /*DataRequester request = new DataRequester();
+
+                    try{
+                        Thread t = new Thread(request);
+                        t.start();
+                        t.join();
+
+                    }
+                    catch (InterruptedException i){
+                        Log.d("ERROR","Thread issue");
+                    }
+                    boolean noData = request.getError();
+
+                    if(noData){
+                        next_screen.putExtra("no_data",noData);
+                        Log.i("WTF","No data");
+                    }
+
+                    next_screen.putExtra("inventory",request.getInventoryData());
+                    next_screen.putExtra("sales",request.getSalesData());
+                    next_screen.putExtra("status",request.getStatusData());
+
+                    Log.d("ERROR",request.getSalesData().toString());
+
+                    if(request.getInventoryData().isEmpty()){
+                        Log.i("CHRIS_EMPTY","inventory");
+                    }
+                    if(request.getStatusData().isEmpty()){
+                        Log.i("CHRIS_EMPTY","status");
+                    }
+                    if(request.getSalesData().isEmpty()){
+                        Log.i("CHRIS_EMPTY","sales");
+                    }
+                    */
                     startActivity(next_screen);  //goes to tabbed screen
                 }else{
                     //incorrect password

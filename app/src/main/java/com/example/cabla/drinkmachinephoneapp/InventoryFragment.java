@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +25,66 @@ import java.util.ArrayList;
  */
 public class InventoryFragment extends Fragment {
 
-    int isDummyData = 1 ;
-    boolean isLowLevel = true ;
+    boolean isLowLevel = false;
 
     public InventoryFragment() {
-        // Required empty public constructor
     }
 
-    public void checkForLowLevel(){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(),"default");
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        ArrayList<String> inventory_info = getArguments().getStringArrayList("inventory");
+        boolean no_status_data = getArguments().getBoolean("no_data");
+        Log.i("CHRISTEST",String.valueOf(no_status_data));
+
+        final View table_view = inflater.inflate(R.layout.fragment_inventory, container, false);
+        TableLayout table = table_view.findViewById(R.id.inventory_table);
+
+        ArrayList<ArrayList<String>> display_data = new ArrayList<ArrayList<String>>();
+        if (no_status_data) {
+            display_data = packDummyData();
+        } else {
+            display_data = packRealData(inventory_info);
+        }
+
+        int view_index = 1;
+        int row_index = 1;
+        int num_of_text_views_per_row = 3;
+        int num_of_text_views = display_data.size() * num_of_text_views_per_row;
+
+        TextView[] data_text_views = new TextView[num_of_text_views];
+        TableRow[] row_inserts = new TableRow[display_data.size()];
+
+        for (ArrayList<String> o : display_data) {
+            row_inserts[row_index - 1] = new TableRow(getContext());
+            for (String str : o) {
+                if (view_index > num_of_text_views) {
+                    break;
+                }
+                data_text_views[view_index - 1] = new TextView(getContext());
+                data_text_views[view_index - 1].setGravity(Gravity.CENTER);
+
+                data_text_views[view_index - 1].setText(str);
+                data_text_views[view_index - 1].setId(view_index);
+                data_text_views[view_index - 1].setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
+                row_inserts[row_index - 1].addView(data_text_views[view_index - 1]);
+                view_index++;
+            }
+            table.addView(row_inserts[row_index - 1]);
+            row_index++;
+        }
+        if (isLowLevel) {
+            notificationForLowLevel();
+        }
+
+        return table_view;
+    }
+
+
+    public void notificationForLowLevel() {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), "default");
         NotificationManager mNotificationManager =
                 (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -59,7 +111,7 @@ public class InventoryFragment extends Fragment {
     }
 
 
-    public ArrayList<ArrayList<String>> packDummyData(){
+    public ArrayList<ArrayList<String>> packDummyData() {
         ArrayList<ArrayList<String>> data_array = new ArrayList<ArrayList<String>>();
         ArrayList<String> data = new ArrayList<>();
         data.add("rum and coke");
@@ -81,46 +133,26 @@ public class InventoryFragment extends Fragment {
 
         return data_array;
     }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
 
-        final View table_view = inflater.inflate(R.layout.fragment_inventory, container, false);
-        TableLayout table = table_view.findViewById(R.id.inventory_table);
+    public ArrayList<ArrayList<String>> packRealData(ArrayList<String> inventory_data) {
+        ArrayList<ArrayList<String>> data_array = new ArrayList<ArrayList<String>>();
+        ArrayList<String> data = new ArrayList<>();
+        Log.i("inventory", inventory_data.toString());
+        for (String str : inventory_data) {
+            String[] item_parts = str.split(" ");
+            data.add(item_parts[0]);
+            data.add(item_parts[1]);
+            data.add(item_parts[2]);
+            double ratio_of_leftover = Integer.valueOf(item_parts[1])/Integer.valueOf(item_parts[2]);
 
-        ArrayList<ArrayList<String>> display_data = new ArrayList<ArrayList<String>>();
-        if(isDummyData == 1){
-            display_data = packDummyData();
-        }else{
-            //set display_data to values retrieved from files
-        }
-
-        int view_index = 1;
-        int row_index = 1;
-        int num_of_text_views_per_row = 3;
-        int num_of_text_views = display_data.size() * num_of_text_views_per_row;
-
-        TextView[] data_text_views = new TextView[num_of_text_views];
-        TableRow[] row_inserts = new TableRow[display_data.size()];
-
-        for(ArrayList<String> o: display_data) {
-            row_inserts[row_index-1] = new TableRow(getContext());
-            for(String str: o){
-                data_text_views[view_index-1] = new TextView(getContext());
-                data_text_views[view_index-1].setGravity(Gravity.CENTER);
-
-                data_text_views[view_index-1].setText(str);
-                data_text_views[view_index-1].setId(view_index);
-                data_text_views[view_index-1].setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
-                row_inserts[row_index-1].addView(data_text_views[view_index-1]);
-                view_index++;
+            //sends a notification if any drink is below 50% fluid level
+            if(ratio_of_leftover < 0.5){
+                isLowLevel = true;
             }
-            table.addView(row_inserts[row_index-1]);
-            row_index++;
+            data_array.add(new ArrayList<String>(data));
+            data.clear();
         }
-        if(isLowLevel) { checkForLowLevel(); }
-        return table_view;
+        return data_array;
     }
 
 }

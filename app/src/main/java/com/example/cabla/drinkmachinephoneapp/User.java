@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -18,16 +19,33 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
+
 public class User extends AppCompatActivity {
+    ArrayList<String> status_package;
+    ArrayList<String> inventory_package;
+    ArrayList<String> sales_package;
+    boolean noData = true;
+
+    //String data_package;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+
+        //get data from main activity
+
+       // status_package = getIntent().getStringArrayListExtra("status");
+        //inventory_package = getIntent().getStringArrayListExtra("inventory");
+        //sales_package = getIntent().getStringArrayListExtra("sales");
+        //no_data = getIntent().getStringArrayListExtra("no_data");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,6 +61,37 @@ public class User extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        DataRequester request = new DataRequester();
+
+        try{
+            InetAddress inet = InetAddress.getByName("http://10.0.0.35:8000/shared_data_2018-11-22.txt");
+            if(inet.isReachable(5000)){
+                Log.i("CHRIS","Can reach server");
+
+                try{
+                    Thread t = new Thread(request);
+                    t.start();
+                    t.join();
+
+                    sales_package = request.getSalesData();
+                    inventory_package = request.getInventoryData();
+                    status_package = request.getStatusData();
+                    noData = false;
+                }
+                catch (InterruptedException i){
+                    Log.d("ERROR","Thread issue");
+
+                }
+
+
+            }
+            else{
+                Log.i("CHRIS","Could not reach server");
+
+            }
+        }catch(Exception e){ }
+
 
     }
 
@@ -122,13 +171,25 @@ public class User extends AppCompatActivity {
 
             switch(position){
                 case 0:
+                    Bundle bundle_0 = new Bundle();
+                    bundle_0.putStringArrayList("inventory",inventory_package);
+                    bundle_0.putBoolean("no_data",noData);
                     cur_fragment = new InventoryFragment() ;
+                    cur_fragment.setArguments(bundle_0);
                     break;
                 case 1:
+                    Bundle bundle_1 = new Bundle();
+                    bundle_1.putStringArrayList("sales",sales_package);
+                    bundle_1.putBoolean("no_data",noData);
                     cur_fragment = new SalesFragment() ;
+                    cur_fragment.setArguments(bundle_1);
                     break;
                 case 2:
+                    Bundle bundle_2 = new Bundle();
+                    bundle_2.putStringArrayList("status",status_package);
+                    bundle_2.putBoolean("no_data",noData);
                     cur_fragment = new StatusFragment();
+                    cur_fragment.setArguments(bundle_2);
                     break;
                 default:
                     //no match
