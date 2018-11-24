@@ -1,5 +1,8 @@
 package com.example.cabla.drinkmachinephoneapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +20,16 @@ public class MainActivity extends AppCompatActivity {
     EditText password;
     int attempts = 3;
 
+    public static final String MYPREFERENCES = "prefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("url","http://10.0.0.35:8000/shared_data_2018-11-22.txt");
+        editor.apply();
         LoginButton();
     }
 
@@ -42,41 +50,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
 
                     Intent next_screen = new Intent("com.example.cabla.drinkmachinephoneapp.User");
-
-                    /*DataRequester request = new DataRequester();
-
-                    try{
-                        Thread t = new Thread(request);
-                        t.start();
-                        t.join();
-
-                    }
-                    catch (InterruptedException i){
-                        Log.d("ERROR","Thread issue");
-                    }
-                    boolean noData = request.getError();
-
-                    if(noData){
-                        next_screen.putExtra("no_data",noData);
-                        Log.i("WTF","No data");
-                    }
-
-                    next_screen.putExtra("inventory",request.getInventoryData());
-                    next_screen.putExtra("sales",request.getSalesData());
-                    next_screen.putExtra("status",request.getStatusData());
-
-                    Log.d("ERROR",request.getSalesData().toString());
-
-                    if(request.getInventoryData().isEmpty()){
-                        Log.i("CHRIS_EMPTY","inventory");
-                    }
-                    if(request.getStatusData().isEmpty()){
-                        Log.i("CHRIS_EMPTY","status");
-                    }
-                    if(request.getSalesData().isEmpty()){
-                        Log.i("CHRIS_EMPTY","sales");
-                    }
-                    */
                     startActivity(next_screen);  //goes to tabbed screen
                 }else{
                     //incorrect password

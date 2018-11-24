@@ -1,6 +1,9 @@
 package com.example.cabla.drinkmachinephoneapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +17,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -26,6 +32,8 @@ public class User extends AppCompatActivity {
     ArrayList<String> status_package;
     ArrayList<String> inventory_package;
     ArrayList<String> sales_package;
+    ArrayList<String> dates;
+    String url = "";
     boolean noData = true;
 
     //String data_package;
@@ -34,23 +42,19 @@ public class User extends AppCompatActivity {
     // The {@link ViewPager} that will host the section contents.
     private ViewPager mViewPager;
 
+    public static final String MYPREFERENCES = "prefs";
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
-        //get data from main activity
-
-       // status_package = getIntent().getStringArrayListExtra("status");
-        //inventory_package = getIntent().getStringArrayListExtra("inventory");
-        //sales_package = getIntent().getStringArrayListExtra("sales");
-        //no_data = getIntent().getStringArrayListExtra("no_data");
+        attemptDataTransfer();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -61,42 +65,35 @@ public class User extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+    }
 
-        DataRequester request = new DataRequester();
-
+    public void attemptDataTransfer(){
+        url = prefs.getString("url","http://10.0.0.35:8000/shared_data_2018-11-22.txt");
+        Log.i("CHRIS_TEST_pref",url);
+        DataRequester request = new DataRequester(url);
         try{
-            InetAddress inet = InetAddress.getByName("http://10.0.0.35:8000/shared_data_2018-11-22.txt");
-            if(inet.isReachable(5000)){
-                Log.i("CHRIS","Can reach server");
+            Log.i("CHRIS","TEST2");
+            Thread t = new Thread(request);
+            t.start();
+            t.join();
 
-                try{
-                    Thread t = new Thread(request);
-                    t.start();
-                    t.join();
+            sales_package = request.getSalesData();
+            inventory_package = request.getInventoryData();
+            status_package = request.getStatusData();
+            dates = request.getDates();
+            noData = false;
+        }
+        catch (InterruptedException i){
+            Log.i("CHRIS","TEST3");
+            Log.d("ERROR","Thread issue");
 
-                    sales_package = request.getSalesData();
-                    inventory_package = request.getInventoryData();
-                    status_package = request.getStatusData();
-                    noData = false;
-                }
-                catch (InterruptedException i){
-                    Log.d("ERROR","Thread issue");
-
-                }
-
-
-            }
-            else{
-                Log.i("CHRIS","Could not reach server");
-
-            }
-        }catch(Exception e){ }
-
+        }
 
     }
 
-/*
-    This method is for attaching features to the menu icon
+
+
+    //This method is for attaching features to the menu icon
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -113,13 +110,21 @@ public class User extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.ip_config) {
+            Intent ip_config_screen = new Intent("com.example.cabla.drinkmachinephoneapp.IP_Config");
+            startActivity(ip_config_screen);
+            return true;
+        }
+        if(id == R.id.request_data){
+            attemptDataTransfer();
+            Toast.makeText(this,"Attempting to update data",
+                    Toast.LENGTH_SHORT).show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-*/
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -149,8 +154,8 @@ public class User extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_user, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
@@ -180,7 +185,9 @@ public class User extends AppCompatActivity {
                 case 1:
                     Bundle bundle_1 = new Bundle();
                     bundle_1.putStringArrayList("sales",sales_package);
+                    bundle_1.putStringArrayList("dates",dates);
                     bundle_1.putBoolean("no_data",noData);
+
                     cur_fragment = new SalesFragment() ;
                     cur_fragment.setArguments(bundle_1);
                     break;

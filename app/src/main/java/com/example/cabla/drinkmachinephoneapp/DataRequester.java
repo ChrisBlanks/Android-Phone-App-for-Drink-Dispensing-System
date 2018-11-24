@@ -7,7 +7,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class DataRequester implements Runnable {
@@ -15,7 +20,18 @@ public class DataRequester implements Runnable {
     private volatile ArrayList<String> status_store = new ArrayList<>();
     private volatile ArrayList<String> inventory_store = new ArrayList<>();
     private volatile ArrayList<String> sales_store = new ArrayList<>();
+    private volatile ArrayList<String> dates = new ArrayList<>();
     private volatile boolean noConnection = false;
+    private String url = "" ;
+
+    DataRequester(String desired_url){
+        if(url != null){
+            url = desired_url;
+        }
+        else{
+            url = "http://10.0.0.35:8000/shared_data_2018-11-22.txt";
+        }
+    }
 
     @Override
     public void run(){
@@ -24,6 +40,9 @@ public class DataRequester implements Runnable {
 
     public boolean getError(){
         return noConnection;
+    }
+    public ArrayList<String> getDates(){
+        return dates;
     }
 
     public ArrayList<String> getStatusData(){
@@ -42,8 +61,36 @@ public class DataRequester implements Runnable {
         URL file_location;
         BufferedReader buffer;
         try {
-            file_location = new URL("http://10.0.0.35:8000/shared_data_2018-11-22.txt");
+            file_location = new URL(url);
             Log.i("CHRIS1",file_location.getFile());
+            String name =file_location.getFile();
+            String regex;
+            Matcher m ;
+            Date date;
+            try{
+                String[] temp_str = name.split("/");
+                int counter_t = 0;
+                for(String i: temp_str){
+                    Log.i("CHRIS_DATE1",temp_str[counter_t]);
+                    counter_t++;
+                    Log.i("CHRIS_DATE2",i);
+                    if(i.contains("shared_data")){
+                        regex = "(\\d{4}-\\d{2}-\\d{2})"; //year month day
+                        m = Pattern.compile(regex).matcher(i);
+                        if(m.find()) {
+                            Log.i("CHRIS_DATE3",m.group(1));
+                            date = new SimpleDateFormat("yyyy-MM-dd").parse(m.group(1));
+                            dates.add(date.toString());
+                            Log.i("CHRIS_DATE4",date.toString());
+                        }else{
+                            Log.i("CHRIS_DATE5","couldn't find");
+                        }
+                    }
+                }
+            }
+            catch(ParseException e){ Log.i("CHRIS_TEST_REG",e.toString()); }
+
+
 
             buffer = new BufferedReader(new InputStreamReader(file_location.openStream()));
             String line;

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cabla.drinkmachinephoneapp">
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/adds_icon"
@@ -21,7 +23,18 @@
             android:label="@string/title_activity_user"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="com.example.cabla.drinkmachinephoneapp.User"/>
+                <action android:name="com.example.cabla.drinkmachinephoneapp.User" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".IP_Config"
+            android:label="@string/title_activity_ip_config"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.example.cabla.drinkmachinephoneapp.IP_Config" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

@@ -33,6 +33,7 @@ public class SalesFragment extends Fragment {
 
     boolean no_status_data;
     ArrayList<String> sales_info;
+    ArrayList<String> dates;
     ArrayList<BarEntry> bar_chart_entries = new ArrayList<>();
     String total_sales = "$45";
     Float axis_size = 10f; //placeholder value
@@ -41,6 +42,7 @@ public class SalesFragment extends Fragment {
 
 
     Boolean initialDisplay = true;
+    String [] dates_for_spin;
     String [] default_values = {"11/18/2018","11/17/2018"};
     //maybe only load the latest 5-8 dates
 
@@ -55,7 +57,18 @@ public class SalesFragment extends Fragment {
         // Inflate the layout for this fragment
         sales_info = getArguments().getStringArrayList("sales");
         no_status_data  = getArguments().getBoolean("no_data") ;
-
+        dates = getArguments().getStringArrayList("dates");
+        if(dates != null) {
+            dates_for_spin = new String[dates.size()+1];
+            int counter = 0;
+            dates_for_spin[counter]= "-----";
+            for (String temp : dates) {
+                dates_for_spin[counter+1] = temp;
+                counter++;
+            }
+        }else{
+            dates_for_spin = default_values;
+        }
         View view_frag = inflater.inflate(R.layout.fragment_sales2, container, false);
         BarChart sales_chart = view_frag.findViewById(R.id.sales_bar_chart);
         sales_chart.invalidate();
@@ -63,7 +76,8 @@ public class SalesFragment extends Fragment {
         TextView rev_val = view_frag.findViewById(R.id.total_revenue_value);
 
         Spinner day_of_sales_spinner = view_frag.findViewById(R.id.day_of_sales_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item,default_values);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_spinner_item,dates_for_spin);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         day_of_sales_spinner.setAdapter(adapter);
@@ -82,15 +96,14 @@ public class SalesFragment extends Fragment {
 
         int count = 1;
         double sum = 0;
-
         for (String str : sales_info) {
             String[] drink_parts = str.split(" ");
-            drink_names[count] = drink_parts[0].replace("_"," ");
+            drink_names[count] = drink_parts[0].replace("_and_"," & ").replace("_"," ");
             sum = sum + Double.valueOf(drink_parts[1]);
             bar_chart_entries.add(new BarEntry(count, Float.valueOf(drink_parts[1])));
             count++;
         }
-        total_sales = "$"+ String.valueOf(sum);
+        total_sales = "$"+ String.valueOf(sum)+"0";
         axis_size = sales_info.size()+1f;
 
     }
@@ -106,23 +119,24 @@ public class SalesFragment extends Fragment {
                     // so this flag ignores that first call, but allows any call after
                 }else{
                     sales_chart.invalidate();
+                    sales_chart.setVisibleXRangeMaximum(axis_size+5);
 
-                    // String total_revenue = container[val];
-                    //total.setText(total_revenue);
                     total.setText(total_sales); //default is "$45" if no other data is present
-
-                    // get how many drinks Float axis_size = (float)(container.length() +1 );
 
                     if(no_status_data) { axis_size = (float) 7; }
                     else{
                         //set inside prepareSalesInfo
                     }
+
                     //axis configuration
                     XAxis x_axis = sales_chart.getXAxis();
+                    x_axis.setLabelCount(sales_info.size()+1);
                     x_axis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    x_axis.setTextSize(10f);
+                    x_axis.setTextSize(2f);
                     x_axis.setAxisMinValue(0f);
                     x_axis.setAxisMaxValue(axis_size);
+                    x_axis.setLabelRotationAngle(-30);
+
 
                     YAxis left_axis = sales_chart.getAxisLeft();
                     YAxis right_axis = sales_chart.getAxisRight();
@@ -145,8 +159,8 @@ public class SalesFragment extends Fragment {
 
                     BarDataSet data_for_display = new BarDataSet(bar_chart_entries,
                             "Revenue from drink menu");
-                    data_for_display.setColors(ColorTemplate.JOYFUL_COLORS);
 
+                    data_for_display.setColors(ColorTemplate.JOYFUL_COLORS);
 
                     if(no_status_data) {
                         drink_names = new String[7];
@@ -189,7 +203,9 @@ public class SalesFragment extends Fragment {
                     //sales_chart.setScaleYEnabled(false);
                     sales_chart.setPinchZoom(false);
                     sales_chart.setDrawGridBackground(false);
-
+                    sales_chart.getAxisRight().setDrawGridLines(false);
+                    sales_chart.getAxisLeft().setDrawGridLines(false);
+                    sales_chart.getXAxis().setDrawGridLines(false);
                     sales_chart.setDescription("Daily Drink Sales");
                     sales_chart.setDescriptionPosition(150,30);
                     sales_chart.getLegend().setEnabled(false);

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class InventoryFragment extends Fragment {
 
     boolean isLowLevel = false;
+    boolean hasAlerted = false;
 
     public InventoryFragment() {
     }
@@ -75,8 +76,9 @@ public class InventoryFragment extends Fragment {
             table.addView(row_inserts[row_index - 1]);
             row_index++;
         }
-        if (isLowLevel) {
+        if (isLowLevel && !hasAlerted) {
             notificationForLowLevel();
+            hasAlerted = true;
         }
 
         return table_view;

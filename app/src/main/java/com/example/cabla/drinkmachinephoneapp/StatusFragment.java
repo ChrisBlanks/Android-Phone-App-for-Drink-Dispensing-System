@@ -32,7 +32,6 @@ public class StatusFragment extends Fragment {
 
         ArrayList<String> status_info = getArguments().getStringArrayList("status");
         boolean no_status_data  = getArguments().getBoolean("no_data") ;
-        //Log.i("CHRIS",status_info.toString());
 
         if(!no_status_data) {
             status_var.setText(status_info.get(0));

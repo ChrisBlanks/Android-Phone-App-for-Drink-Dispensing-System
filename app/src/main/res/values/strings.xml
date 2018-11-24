@@ -5,8 +5,12 @@
     <string name="password_label">Password</string>
     <string name="login_button">Login</string>
     <string name="title_activity_user">User</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="title_activity_ip_config">IPConfig</string>
+    <string name="url_config">Configure URL</string>
+    <string name="request_data">Update Data</string>
+    <string name="section_format">Update Data</string>
+
     <string name="tab_text_1">Inventory</string>
     <string name="tab_text_2">Sales</string>
     <string name="tab_text_3">System Status</string>
@@ -17,7 +21,6 @@
     <string name="subtitle3">Original QTY</string>
 
     <string name="total_revenue">Total revenue:</string>
-
 
     <string name="status_label">Status:</string>
     <string name="mode_label">Mode:</string>
