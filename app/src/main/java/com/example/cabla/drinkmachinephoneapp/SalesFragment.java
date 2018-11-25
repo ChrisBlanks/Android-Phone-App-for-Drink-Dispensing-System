@@ -43,7 +43,7 @@ public class SalesFragment extends Fragment {
 
     Boolean initialDisplay = true;
     String [] dates_for_spin;
-    String [] default_values = {"11/18/2018","11/17/2018"};
+    String [] default_values = {"-----","11/17/2018"};
     //maybe only load the latest 5-8 dates
 
     public SalesFragment() {
