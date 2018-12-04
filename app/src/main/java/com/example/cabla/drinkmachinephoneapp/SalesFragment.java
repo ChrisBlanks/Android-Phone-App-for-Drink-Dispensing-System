@@ -43,7 +43,7 @@ public class SalesFragment extends Fragment {
 
     Boolean initialDisplay = true;
     String [] dates_for_spin;
-    String [] default_values = {"-----","11/17/2018"};
+    String [] default_values = {"Dates","11/17/2018"};
     //maybe only load the latest 5-8 dates
 
     public SalesFragment() {
@@ -213,7 +213,7 @@ public class SalesFragment extends Fragment {
                     sales_chart.getAxisLeft().setDrawGridLines(false);
                     sales_chart.getXAxis().setDrawGridLines(false);
                     sales_chart.setDescription("Daily Drink Sales");
-                    sales_chart.setDescriptionPosition(150,30);
+                    sales_chart.setDescriptionPosition(425,30);
                     sales_chart.getLegend().setEnabled(false);
                     sales_chart.setData(data);
                 }

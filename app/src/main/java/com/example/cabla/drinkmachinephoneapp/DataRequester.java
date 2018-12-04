@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ public class DataRequester implements Runnable {
     private volatile ArrayList<String> sales_store = new ArrayList<>();
     private volatile ArrayList<String> dates = new ArrayList<>();
     private volatile boolean noConnection = false;
+    private volatile boolean isDone = false;
     private String url = "" ;
 
     DataRequester(String desired_url){
@@ -91,9 +93,14 @@ public class DataRequester implements Runnable {
             }
             catch(ParseException e){ Log.i("CHRIS_TEST_REG",e.toString()); }
 
-
-
-            buffer = new BufferedReader(new InputStreamReader(file_location.openStream()));
+            HttpURLConnection huc =  (HttpURLConnection)file_location.openConnection() ;
+            HttpURLConnection.setFollowRedirects(false);
+            int ONE_SEC = 1000;
+            huc.setConnectTimeout(3 * ONE_SEC);
+            huc.setReadTimeout(3 * ONE_SEC);
+            huc.setRequestMethod("GET");
+            huc.connect();
+            buffer = new BufferedReader(new InputStreamReader(huc.getInputStream()));
             String line;
 
             boolean statusSaveKey = false;

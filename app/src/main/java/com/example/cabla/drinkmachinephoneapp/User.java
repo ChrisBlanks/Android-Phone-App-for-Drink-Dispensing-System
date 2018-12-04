@@ -22,10 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class User extends AppCompatActivity {
@@ -51,12 +48,12 @@ public class User extends AppCompatActivity {
         setContentView(R.layout.activity_user);
         prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
-        attemptDataTransfer();
+        /*attemptDataTransfer();
         if(noData){
             Toast.makeText(this,"Could not retrieve data from: "+url,
                     Toast.LENGTH_LONG).show(); //LENGTH_LONG = 3.5 sec
         }
-
+        */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -124,11 +121,11 @@ public class User extends AppCompatActivity {
         }
         if(id == R.id.request_data){
             Toast.makeText(this,"Attempting to update data",
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_SHORT).show();
             attemptDataTransfer();
             if(noData){
                 Toast.makeText(this,"Could not retrieve data from: "+url,
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             }
 
             return true;

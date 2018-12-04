@@ -26,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("url","http://10.0.0.35:8000/shared_data_2018-11-22.txt");
-        editor.apply();
+        //SharedPreferences prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
+        //SharedPreferences.Editor editor = prefs.edit();
+        //editor.putString("url","http://10.0.0.35:8000/shared_data_2018-11-22.txt");
+        //editor.apply();
         LoginButton();
     }
 

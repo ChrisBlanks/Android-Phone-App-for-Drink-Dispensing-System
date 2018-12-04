@@ -115,24 +115,62 @@ public class InventoryFragment extends Fragment {
 
     public ArrayList<ArrayList<String>> packDummyData() {
         ArrayList<ArrayList<String>> data_array = new ArrayList<ArrayList<String>>();
+
         ArrayList<String> data = new ArrayList<>();
-        data.add("rum and coke");
+        data.add("light rum");
         data.add("700 ml");
         data.add("1000 ml");
         data_array.add(data);
 
         ArrayList<String> data2 = new ArrayList<>();
         data2.add("vodka");
-        data2.add("500 ml");
+        data2.add("400 ml");
         data2.add("1000 ml");
         data_array.add(data2);
 
         ArrayList<String> data3 = new ArrayList<>();
         data3.add("Tequila");
-        data3.add("500 ml");
+        data3.add("600 ml");
         data3.add("1000 ml");
         data_array.add(data3);
 
+        ArrayList<String> data4 = new ArrayList<>();
+        data4.add("Simple Syrup");
+        data4.add("800 ml");
+        data4.add("1000 ml");
+        data_array.add(data4);
+
+        ArrayList<String> data5 = new ArrayList<>();
+        data5.add("Soda Water");
+        data5.add("1500 ml");
+        data5.add("2000 ml");
+        data_array.add(data5);
+
+        ArrayList<String> data6 = new ArrayList<>();
+        data6.add("Triple Sec");
+        data6.add("300 ml");
+        data6.add("500 ml");
+        data_array.add(data6);
+
+        ArrayList<String> data7 = new ArrayList<>();
+        data7.add("Lemon Juice");
+        data7.add("200 ml");
+        data7.add("300 ml");
+        data_array.add(data7);
+
+        ArrayList<String> data8 = new ArrayList<>();
+        data8.add("Orange Juice");
+        data8.add("500 ml");
+        data8.add("800 ml");
+        data_array.add(data8);
+
+        ArrayList<String> data9 = new ArrayList<>();
+        data9.add("Cranberry Juice");
+        data9.add("800 ml");
+        data9.add("1000 ml");
+        data_array.add(data9);
+
+        isLowLevel = true;
         return data_array;
     }
 

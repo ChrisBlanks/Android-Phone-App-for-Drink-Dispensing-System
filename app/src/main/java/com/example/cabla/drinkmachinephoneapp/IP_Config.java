@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class IP_Config extends AppCompatActivity {
     TextView ip_entry;
@@ -38,6 +39,7 @@ public class IP_Config extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("url",new_url.getText().toString());
                 editor.apply();
+                Toast.makeText(getApplicationContext(),"Updated URL",Toast.LENGTH_LONG).show();
                 startActivity(previous);
             }
         });
