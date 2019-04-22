@@ -46,8 +46,11 @@ public class InventoryFragment extends Fragment {
         if (no_status_data == true) {
             display_data = packDummyData();
             Log.i("CHRISTEST","No inventory data");
-        } else {
+        } else if (inventory_info != null) {
             display_data = packRealData(inventory_info);
+        }else{
+            display_data = packDummyData();
+            Log.i("CHRISTEST","No inventory data");
         }
 
         int view_index = 1;

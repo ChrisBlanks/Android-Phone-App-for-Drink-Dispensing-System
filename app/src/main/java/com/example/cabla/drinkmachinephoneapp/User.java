@@ -204,7 +204,7 @@ public class User extends AppCompatActivity {
                 case 0:
                     Bundle bundle_0 = new Bundle();
                     cur_fragment = new InventoryFragment();
-                    if(inventory_package.isEmpty()){
+                    if(inventory_package == null){
 
                     }else{
                         bundle_0.putStringArrayList("inventory",inventory_package);
@@ -215,7 +215,7 @@ public class User extends AppCompatActivity {
                     break;
                 case 1:
                     Bundle bundle_1 = new Bundle();
-                    if(sales_package.isEmpty()){
+                    if(sales_package == null){
 
                     }else {
 
@@ -228,7 +228,7 @@ public class User extends AppCompatActivity {
                     break;
                 case 2:
                     Bundle bundle_2 = new Bundle();
-                    if(status_package.isEmpty()){
+                    if(status_package == null){
 
                     }else {
 

@@ -58,7 +58,7 @@ public class SalesFragment extends Fragment {
         sales_info = getArguments().getStringArrayList("sales");
         no_status_data  = getArguments().getBoolean("no_data") ;
         dates = getArguments().getStringArrayList("dates");
-        if(!no_status_data){
+        if(no_status_data == false && sales_info != null){
                 Log.i("CHRIS_SALES","Have data");
                 if(! dates.isEmpty() ) {
                     Log.i("CHRIS_SALES","Have dates");
@@ -87,7 +87,7 @@ public class SalesFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         day_of_sales_spinner.setAdapter(adapter);
 
-        if(!no_status_data){
+        if(no_status_data == false && sales_info != null){
             prepareSalesInfo();
         }
         setupCallbacks(day_of_sales_spinner,view_frag,sales_chart,rev_val);

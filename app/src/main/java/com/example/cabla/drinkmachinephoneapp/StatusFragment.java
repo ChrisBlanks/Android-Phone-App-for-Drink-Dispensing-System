@@ -33,7 +33,7 @@ public class StatusFragment extends Fragment {
         ArrayList<String> status_info = getArguments().getStringArrayList("status");
         boolean no_status_data  = getArguments().getBoolean("no_data") ;
 
-        if(!no_status_data) {
+        if(no_status_data == false && status_info != null ) {
             status_var.setText(status_info.get(0));
             mode_var.setText(status_info.get(1));
             cur_user_var.setText(status_info.get(2));
