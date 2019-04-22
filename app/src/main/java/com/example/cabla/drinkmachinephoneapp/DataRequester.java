@@ -70,17 +70,19 @@ public class DataRequester implements Runnable {
             String regex;
             Matcher m ;
             Date date;
+
+            //retrieve data of file from its name
             try{
-                String[] temp_str = name.split("/");
+                String[] temp_str = name.split("/"); //split file path into location & name
                 int counter_t = 0;
                 for(String i: temp_str){
                     Log.i("CHRIS_DATE1",temp_str[counter_t]);
                     counter_t++;
                     Log.i("CHRIS_DATE2",i);
                     if(i.contains("shared_data")){
-                        regex = "(\\d{4}-\\d{2}-\\d{2})"; //year month day
+                        regex = "(\\d{4}-\\d{2}-\\d{2})"; //4 digit year, 2 digit month, 2 digit day
                         m = Pattern.compile(regex).matcher(i);
-                        if(m.find()) {
+                        if(m.find()) { //if found in substring then reformat into year month day
                             Log.i("CHRIS_DATE3",m.group(1));
                             date = new SimpleDateFormat("yyyy-MM-dd").parse(m.group(1));
                             dates.add(date.toString());

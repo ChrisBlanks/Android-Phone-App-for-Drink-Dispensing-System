@@ -43,8 +43,9 @@ public class InventoryFragment extends Fragment {
         TableLayout table = table_view.findViewById(R.id.inventory_table);
 
         ArrayList<ArrayList<String>> display_data = new ArrayList<ArrayList<String>>();
-        if (no_status_data) {
+        if (no_status_data == true) {
             display_data = packDummyData();
+            Log.i("CHRISTEST","No inventory data");
         } else {
             display_data = packRealData(inventory_info);
         }
@@ -179,7 +180,7 @@ public class InventoryFragment extends Fragment {
         ArrayList<String> data = new ArrayList<>();
         Log.i("inventory", inventory_data.toString());
         for (String str : inventory_data) {
-            String[] item_parts = str.split(" ");
+            String[] item_parts = str.trim().split(" ");
             data.add(item_parts[0]);
             data.add(item_parts[1]);
             data.add(item_parts[2]);

@@ -47,8 +47,8 @@ public class User extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         prefs = getApplicationContext().getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
-
-        /*attemptDataTransfer();
+        attemptDataTransfer();
+        /*
         if(noData){
             Toast.makeText(this,"Could not retrieve data from: "+url,
                     Toast.LENGTH_LONG).show(); //LENGTH_LONG = 3.5 sec
@@ -68,6 +68,8 @@ public class User extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 
+
+
     public void attemptDataTransfer(){
         url = prefs.getString("url","http://10.0.0.35:8000/shared_data_2018-11-22.txt");
         Log.i("CHRIS_TEST_pref",url);
@@ -78,12 +80,27 @@ public class User extends AppCompatActivity {
             t.start();
             t.join();
             if(request.getError()){
+                Log.i("CHRIS","Error in request.");
                 noData = true;
             }else {
                 sales_package = request.getSalesData();
                 inventory_package = request.getInventoryData();
                 status_package = request.getStatusData();
                 dates = request.getDates();
+                StringBuilder sb = new StringBuilder();
+                for(String s : sales_package){
+                    sb.append(s);
+                    sb.append("\n");
+                }
+                Log.i("CHRIS_SALES",sb.toString());
+
+                StringBuilder sb2 = new StringBuilder();
+                for(String s : inventory_package){
+                    sb2.append(s);
+                    sb2.append("\n");
+                }
+                Log.i("CHRIS_INVENTORY",sb2.toString());
+
                 noData = false;
             }
         }
@@ -186,24 +203,38 @@ public class User extends AppCompatActivity {
             switch(position){
                 case 0:
                     Bundle bundle_0 = new Bundle();
-                    bundle_0.putStringArrayList("inventory",inventory_package);
-                    bundle_0.putBoolean("no_data",noData);
-                    cur_fragment = new InventoryFragment() ;
+                    cur_fragment = new InventoryFragment();
+                    if(inventory_package.isEmpty()){
+
+                    }else{
+                        bundle_0.putStringArrayList("inventory",inventory_package);
+                        bundle_0.putBoolean("no_data",noData);
+                    }
+
                     cur_fragment.setArguments(bundle_0);
                     break;
                 case 1:
                     Bundle bundle_1 = new Bundle();
-                    bundle_1.putStringArrayList("sales",sales_package);
-                    bundle_1.putStringArrayList("dates",dates);
-                    bundle_1.putBoolean("no_data",noData);
+                    if(sales_package.isEmpty()){
 
+                    }else {
+
+                        bundle_1.putStringArrayList("sales", sales_package);
+                        bundle_1.putStringArrayList("dates", dates);
+                        bundle_1.putBoolean("no_data", noData);
+                    }
                     cur_fragment = new SalesFragment() ;
                     cur_fragment.setArguments(bundle_1);
                     break;
                 case 2:
                     Bundle bundle_2 = new Bundle();
-                    bundle_2.putStringArrayList("status",status_package);
-                    bundle_2.putBoolean("no_data",noData);
+                    if(status_package.isEmpty()){
+
+                    }else {
+
+                        bundle_2.putStringArrayList("status", status_package);
+                        bundle_2.putBoolean("no_data", noData);
+                    }
                     cur_fragment = new StatusFragment();
                     cur_fragment.setArguments(bundle_2);
                     break;

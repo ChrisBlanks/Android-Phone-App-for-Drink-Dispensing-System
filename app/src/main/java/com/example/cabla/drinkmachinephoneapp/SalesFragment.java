@@ -58,8 +58,10 @@ public class SalesFragment extends Fragment {
         sales_info = getArguments().getStringArrayList("sales");
         no_status_data  = getArguments().getBoolean("no_data") ;
         dates = getArguments().getStringArrayList("dates");
-        if(no_status_data == false){
-                if(dates != null) {
+        if(!no_status_data){
+                Log.i("CHRIS_SALES","Have data");
+                if(! dates.isEmpty() ) {
+                    Log.i("CHRIS_SALES","Have dates");
                     dates_for_spin = new String[dates.size() + 1];
                     int counter = 0;
                     dates_for_spin[counter] = "-----";
@@ -100,7 +102,11 @@ public class SalesFragment extends Fragment {
         int count = 1;
         double sum = 0;
         for (String str : sales_info) {
-            String[] drink_parts = str.split(" ");
+            Log.i("sales_loop", str);
+            String[] drink_parts = str.trim().split(" "); //remove white space at beginning and end
+            Log.i("sales_loop", String.valueOf(drink_parts.length));
+            Log.i("sales_loop", drink_parts[0]);
+            Log.i("sales_loop", drink_parts[1]);
             drink_names[count] = drink_parts[0].replace("_and_"," & ").replace("_"," ");
             sum = sum + Double.valueOf(drink_parts[1]);
             bar_chart_entries.add(new BarEntry(count, Float.valueOf(drink_parts[1])));
