@@ -57,6 +57,7 @@ public class SalesFragment extends Fragment {
         // Inflate the layout for this fragment
         sales_info = getArguments().getStringArrayList("sales");
         no_status_data  = getArguments().getBoolean("no_data") ;
+        Log.i("CHRISTEST","Sales bool: "+String.valueOf(no_status_data));
         dates = getArguments().getStringArrayList("dates");
         if(no_status_data == false && sales_info != null){
                 Log.i("CHRIS_SALES","Have data");
@@ -73,6 +74,7 @@ public class SalesFragment extends Fragment {
         }
         else{
             dates_for_spin = default_values;
+            Log.i("CHRISTEST","No data in sales fragment");
         }
         View view_frag = inflater.inflate(R.layout.fragment_sales2, container, false);
         BarChart sales_chart = view_frag.findViewById(R.id.sales_bar_chart);
@@ -167,6 +169,7 @@ public class SalesFragment extends Fragment {
                         bar_chart_entries.add(new BarEntry(6, 10));
                     }else{
                         //set inside prepareSalesInfo
+                        Log.i("CHRISTEST","no status is false in sales");
                     }
 
                     BarDataSet data_for_display = new BarDataSet(bar_chart_entries,
@@ -185,6 +188,7 @@ public class SalesFragment extends Fragment {
                         drink_names[6] = "Vodka & Cranberry";
                     }else{
                         //set inside prepareSalesInfo
+                        Log.i("CHRISTEST","no status is false in sales");
                     }
 
                     //needs to be an arraylist object before put on X-axis

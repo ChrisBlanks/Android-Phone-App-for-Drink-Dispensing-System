@@ -103,6 +103,7 @@ public class User extends AppCompatActivity {
 
                 noData = false;
             }
+            Log.i("CHRIS_bool",String.valueOf(noData));
         }
         catch (InterruptedException i){
             Log.i("CHRIS","TEST3");
@@ -199,13 +200,13 @@ public class User extends AppCompatActivity {
         @Override // getItem is called to instantiate the fragment for the given page.
         public Fragment getItem(int position) {
             Fragment cur_fragment = null;
-
+            Log.i("CHRIS_bool_b4_frag",String.valueOf(noData));
             switch(position){
                 case 0:
                     Bundle bundle_0 = new Bundle();
                     cur_fragment = new InventoryFragment();
                     if(inventory_package == null){
-
+                        bundle_0.putBoolean("no_data",noData);
                     }else{
                         bundle_0.putStringArrayList("inventory",inventory_package);
                         bundle_0.putBoolean("no_data",noData);
@@ -216,7 +217,7 @@ public class User extends AppCompatActivity {
                 case 1:
                     Bundle bundle_1 = new Bundle();
                     if(sales_package == null){
-
+                        bundle_1.putBoolean("no_data",noData);
                     }else {
 
                         bundle_1.putStringArrayList("sales", sales_package);
@@ -229,7 +230,7 @@ public class User extends AppCompatActivity {
                 case 2:
                     Bundle bundle_2 = new Bundle();
                     if(status_package == null){
-
+                        bundle_2.putBoolean("no_data",noData);
                     }else {
 
                         bundle_2.putStringArrayList("status", status_package);

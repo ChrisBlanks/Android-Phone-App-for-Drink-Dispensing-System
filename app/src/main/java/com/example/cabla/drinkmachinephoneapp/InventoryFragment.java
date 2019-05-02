@@ -37,7 +37,7 @@ public class InventoryFragment extends Fragment {
 
         ArrayList<String> inventory_info = getArguments().getStringArrayList("inventory");
         boolean no_status_data = getArguments().getBoolean("no_data");
-        Log.i("CHRISTEST",String.valueOf(no_status_data));
+        Log.i("CHRISTEST","Inventory "+String.valueOf(no_status_data));
 
         final View table_view = inflater.inflate(R.layout.fragment_inventory, container, false);
         TableLayout table = table_view.findViewById(R.id.inventory_table);
@@ -45,7 +45,7 @@ public class InventoryFragment extends Fragment {
         ArrayList<ArrayList<String>> display_data = new ArrayList<ArrayList<String>>();
         if (no_status_data == true) {
             display_data = packDummyData();
-            Log.i("CHRISTEST","No inventory data");
+            Log.i("CHRISTEST","No data in inventory fragment");
         } else if (inventory_info != null) {
             display_data = packRealData(inventory_info);
         }else{
